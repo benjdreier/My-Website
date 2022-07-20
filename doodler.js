@@ -79,12 +79,10 @@ function Doodle(startTime, x, y) {
 
         if(this.ageOfDeath && this.ageOfDeath <= myCurrentAge) {
             this.finished = true;
-            return
         }
         if(!this.ageOfDeath && this.nCompletePaths == this.pathList.length) {
             this.totallyComplete = true;
             this.ageOfDeath = myCurrentAge + this.decayTime;
-            return
         } 
         
         for (var i = 0; i < this.pathList.length; i++) {
