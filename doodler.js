@@ -7,14 +7,22 @@ const ctx = canvas.getContext("2d");
 
 var mouseX, mouseY;
 let backgroundPattern;
+function initBackgroundPattern() {
+    let bgImage = new Image(300, 300);
+    bgImage.src = 'gridpaper.jpg';
+    bgImage.crossorigin = "anonymous";
+    backgroundPattern = ctx.createPattern(bgImage, 'repeat');
+}
 
 function drawBackground() {
+    if(!backgroundPattern) {
+        initBackgroundPattern();
+    }
     let oldColor = ctx.fillColor;
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
     //ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = backgroundPattern;
-    ctx.fillStyle = "white";
     ctx.fill();
     ctx.fillStyle = oldColor;
 }
@@ -124,12 +132,6 @@ window.addEventListener('resize', resize)
 requestAnimationFrame(() => {
     resize();
     draw();
-
-    // let bgImage = new Image(300, 300);
-    // bgImage.src = 'gridpaper.jpg';
-    // bgImage.crossorigin = "anonymous";
-    // backgroundPattern = ctx.createPattern(bgImage, 'repeat');
-
 })
 
 window.addEventListener('mousemove', (e) => {
