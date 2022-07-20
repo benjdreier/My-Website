@@ -16,6 +16,7 @@ function initBackgroundPattern() {
 
 function drawBackground() {
     if(!backgroundPattern) {
+        console.log("INIT");
         initBackgroundPattern();
     }
     let oldColor = ctx.fillColor;
@@ -88,7 +89,6 @@ function Doodle(startTime, x, y) {
         
         for (var i = 0; i < this.pathList.length; i++) {
             let pathString = this.pathList[i];
-            let pathSegments = pathString.split(" ");
             let subpath = new Path2D();
             let m = (new DOMMatrix())
                 .translate(this.x, this.y)
@@ -96,14 +96,15 @@ function Doodle(startTime, x, y) {
 
             if(this.nCompletePaths > i) {
                 // this path is complete
-                // draw the whole pathSegments
-                let subpathOrigin = new Path2D(pathSegments);
+                // draw the whole pathString
+                let subpathOrigin = new Path2D(pathString);
                 subpath.addPath(subpathOrigin, m);
                 ctx.stroke(subpath);
             } else if(this.nCompletePaths == i) {
                 // this path is started but not complete
                 let segmentAge = myCurrentAge - this.ageSegmentStarted;
                 let nSegments = Math.floor(segmentAge * this.speed);
+                let pathSegments = pathString.split(" ");
                 if(nSegments >= pathSegments.length) {
                     // finished this segment, on to the next
                     this.nCompletePaths += 1;
