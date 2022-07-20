@@ -7,17 +7,19 @@ const ctx = canvas.getContext("2d");
 
 var mouseX, mouseY;
 let backgroundPattern;
-function initBackgroundPattern() {
+function getBackgroundPattern() {
     let bgImage = new Image(300, 300);
     bgImage.src = 'gridpaper.jpg';
     bgImage.crossorigin = "anonymous";
-    backgroundPattern = ctx.createPattern(bgImage, 'repeat');
+    return ctx.createPattern(bgImage, 'repeat');
 }
 
 function drawBackground() {
     if(!backgroundPattern) {
         console.log("INIT");
-        initBackgroundPattern();
+        backgroundPattern = getBackgroundPattern();
+        // DEBUG:
+        // backgroundPattern = "white";
     }
     let oldColor = ctx.fillColor;
     ctx.beginPath();
@@ -30,11 +32,10 @@ function drawBackground() {
 
 let universeBirthday;
 let totalElapsed;
-let activeDoodles;
+let activeDoodles = [];
 function draw(nowTime) {
     if(universeBirthday === undefined) {
         universeBirthday = nowTime;
-        activeDoodles = [new Doodle(universeBirthday)];
     }
     totalElapsed = nowTime - universeBirthday;
 
@@ -56,14 +57,24 @@ function draw(nowTime) {
 }
 
 document.addEventListener("click", () => {
-    console.log(document.documentElement.scrollHeight);
     activeDoodles.push(new Doodle(totalElapsed, mouseX, mouseY))
 })
+
+function randomlySpawnDoodle() {
+    let randomTime = Math.random() * 1000 + 500;
+    let randomX = Math.random() * window.innerWidth;
+    let randomY = Math.random() * window.innerHeight + window.scrollY;
+
+    activeDoodles.push(new Doodle(totalElapsed, randomX, randomY))
+
+    setTimeout(randomlySpawnDoodle, randomTime)
+}
+randomlySpawnDoodle();
 
 function Doodle(startTime, x, y) {
     let source = DOODLE_PATHS[Math.floor(Math.random() * DOODLE_PATHS.length)]; // TODO: pick randomly
     this.pathList = source.pathList;
-    this.speed = source.speed || 60 / 1000;
+    this.speed = source.speed || 150 / 1000;
     this.x = x;
     this.y = y;
     this.angle = Math.random() * 360;
@@ -76,10 +87,19 @@ function Doodle(startTime, x, y) {
 
     this.render = function(totalElapsed) {
         let myCurrentAge = totalElapsed - startTime;
+        let prevStrokeStyle = ctx.strokeStyle;
 
-        if(this.ageOfDeath && this.ageOfDeath <= myCurrentAge) {
-            this.finished = true;
+        // first check if we're dying
+        if(this.ageOfDeath) {
+            if(this.ageOfDeath <= myCurrentAge) {
+                // die
+                this.finished = true;
+            }
+            // fade as we die
+            let lifePercentage = (this.ageOfDeath - myCurrentAge) / this.decayTime;
+            ctx.strokeStyle = `rgb(0, 0, 0, ${lifePercentage})`;
         }
+        // or at the precipice of death
         if(!this.ageOfDeath && this.nCompletePaths == this.pathList.length) {
             this.totallyComplete = true;
             this.ageOfDeath = myCurrentAge + this.decayTime;
@@ -118,7 +138,8 @@ function Doodle(startTime, x, y) {
                 ctx.stroke(pathToDraw);    
             }
         }
-        
+
+        ctx.strokeStyle = prevStrokeStyle;  
     }
 }
 
