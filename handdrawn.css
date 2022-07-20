@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import url(https://fonts.googleapis.com/css?family=Architects+Daughter);
 body {
-  background: whitesmoke url(assets/backgrounds/paper_texture310.jpg);
+  /*background: whitesmoke url(assets/backgrounds/paper_texture310.jpg);*/
   font-family: 'Architects Daughter', cursive;
 }
 
