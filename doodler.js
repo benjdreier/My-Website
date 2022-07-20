@@ -114,8 +114,11 @@ function Doodle(startTime, x, y) {
                 }
             }
 
-            pathToDraw.addPath(pathToDrawAtOrigin, m);
-            ctx.stroke(pathToDraw);        
+            // if we've touched this path yet
+            if(this.nCompletePaths >= i) {
+                pathToDraw.addPath(pathToDrawAtOrigin, m);
+                ctx.stroke(pathToDraw);    
+            }
         }
         
     }
