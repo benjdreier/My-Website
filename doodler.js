@@ -14,11 +14,7 @@ const heartPathSections = HEART_PATH.split(" ");
 const spiralPathSections = SPIRAL_PATH.split(" ");
 
 
-
-let bgImage = new Image(300, 300);
-bgImage.src = 'gridpaper.jpg';
-bgImage.crossorigin = "anonymous";
-let backgroundPattern = ctx.createPattern(bgImage, 'repeat');
+let backgroundPattern;
 
 function drawBackground() {
     let oldColor = ctx.fillColor;
@@ -104,6 +100,12 @@ window.addEventListener('resize', resize)
 requestAnimationFrame(() => {
     resize();
     draw();
+    
+    let bgImage = new Image(300, 300);
+    bgImage.src = 'gridpaper.jpg';
+    bgImage.crossorigin = "anonymous";
+    backgroundPattern = ctx.createPattern(bgImage, 'repeat');
+
 })
 
 window.addEventListener('mousemove', (e) => {
