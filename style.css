@@ -37,7 +37,7 @@ body {
 #bio {
 	flex:  3;
 	margin: 5px;
-	padding: 10px;5
+	padding: 10px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -82,4 +82,32 @@ body {
 .job {
 	flex: 1;
 	padding: 15px;
+}
+
+.project-pane {
+	display: flex;
+}
+
+.project-image {
+	width: 300px
+}
+
+#floating-header {
+	position: fixed;
+	top: 20px;
+	right: 30px;
+	font-size: 50px;
+}
+
+.icon-link {
+	text-decoration: none;
+	color: #717171;
+}
+
+.icon-link::before {
+	content: none;
+}
+
+.icon-link:hover {
+	color: #000
 }

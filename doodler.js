@@ -32,12 +32,18 @@ function drawBackground() {
 
 let universeBirthday;
 let totalElapsed;
+let prevTime;
+let DOODLES_PER_SECOND = 1;
+
 let activeDoodles = [];
+
 function draw(nowTime) {
     if(universeBirthday === undefined) {
         universeBirthday = nowTime;
     }
     totalElapsed = nowTime - universeBirthday;
+    deltaTime = nowTime - prevTime;
+    prevTime = nowTime;
 
     drawBackground();
 
@@ -51,6 +57,11 @@ function draw(nowTime) {
             activeDoodles.splice(i, 1);
         }
     }
+
+    // maybe randomly spawn a new doodle
+    if(Math.random() < DOODLES_PER_SECOND * deltaTime / 1000) {
+        randomlySpawnDoodle();
+    }
     
     document.body.style.background = "url(" + canvas.toDataURL() + ")";
     requestAnimationFrame(draw);
@@ -61,15 +72,15 @@ document.addEventListener("click", () => {
 })
 
 function randomlySpawnDoodle() {
-    let randomTime = Math.random() * 1000 + 500;
+    // let randomTime = Math.random() * 2000 + 1000;
     let randomX = Math.random() * window.innerWidth;
     let randomY = Math.random() * window.innerHeight + window.scrollY;
 
     activeDoodles.push(new Doodle(totalElapsed, randomX, randomY))
 
-    setTimeout(randomlySpawnDoodle, randomTime)
+    // setTimeout(randomlySpawnDoodle, randomTime)
 }
-randomlySpawnDoodle();
+//randomlySpawnDoodle();
 
 function Doodle(startTime, x, y) {
     let source = DOODLE_PATHS[Math.floor(Math.random() * DOODLE_PATHS.length)]; // TODO: pick randomly
